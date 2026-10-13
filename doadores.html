@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Doadores</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+    <link rel="stylesheet" href="pagina.css">
+</head>
+<body>
+     <aside class="sidebar">
+    <div class="brand">
+      <img src="Logo.png" alt="Logo HemoConecta">
+    </div>
+
+    <div class="menu-label">Menu Principal</div>
+    <nav class="nav flex-column">
+      <a href="#" class="nav-link active"><i class="bi bi-people"></i><span>Doadores</span></a>
+      <a href="#" class="nav-link"><i class="bi bi-bell"></i><span>Notificações</span></a>
+      <a href="#" class="nav-link"><i class="bi bi-gift"></i><span>Empresas Parceiras</span></a>
+      <a href="#" class="nav-link"><i class="bi bi-trophy"></i><span>Medalhas e Rankings</span></a>
+      <a href="#" class="nav-link"><i class="bi bi-book"></i><span>Conteúdo Educacional</span></a>
+    </nav>
+  </aside>
+
+  <header class="topbar">
+    <div class="text-end">
+      <div class="user-name">Júlia Moura</div>
+      <div class="user-role">Administrador</div>
+    </div>
+  </header>
+
+   <main class="main-content">
+    <h1 class="page-title">Doadores</h1>
+
+    <!-- Cartões de estatísticas -->
+    <div class="row g-3 stats-grid">
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-label">Total Doadores</div>
+          <div class="stat-number">12.450</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-label">Aptos a Doar</div>
+          <div class="stat-number number-green">8.230</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-label">Aguardando Prazo</div>
+          <div class="stat-number number-orange">3.150</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-label">Inaptos</div>
+          <div class="stat-number number-red">1.070</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pesquisa, filtros e tabela -->
+    <section class="donor-panel">
+      <div class="search-area">
+        <div class="search-wrap">
+          <i class="bi bi-search"></i>
+          <input id="searchDonor" type="search" class="form-control search-input"
+                 placeholder="Buscar por nome, CPF ou email..." aria-label="Buscar doador">
+        </div>
+        <button class="filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#filters">
+          <i class="bi bi-funnel me-1"></i> Mais Filtros
+        </button>
+      </div>
+
+      <div class="collapse px-3 py-3 border-bottom" id="filters">
+        <label for="bloodFilter" class="form-label small">Tipo sanguíneo</label>
+        <select id="bloodFilter" class="form-select" style="max-width: 220px;">
+          <option value="">Todos os tipos</option>
+          <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
+          <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+        </select>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th scope="col">Doador</th>
+              <th scope="col">Tipo Sanguíneo</th>
+              <th scope="col">Última Doação</th>
+              <th scope="col" class="text-center">Total Doações</th>
+              <th scope="col" class="text-end">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="donorTable">
+            <tr data-blood="O+">
+              <td><span class="donor-name">Lucas Silva</span></td>
+              <td><span class="blood-type">O+</span></td>
+              <td>12/05/2023</td>
+              <td class="text-center">28</td>
+              <td class="text-end">
+                <a href="#" class="action-icon" aria-label="Ver doador" title="Ver doador"><i class="bi bi-eye"></i></a>
+                <a href="mailto:lucas@example.com" class="action-icon" aria-label="Enviar e-mail" title="Enviar e-mail"><i class="bi bi-envelope"></i></a>
+                <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
+              </td>
+            </tr>
+            <tr data-blood="A-">
+              <td><span class="donor-name">Mariana Costa</span></td>
+              <td><span class="blood-type">A-</span></td>
+              <td>03/08/2023</td>
+              <td class="text-center">25</td>
+              <td class="text-end">
+                <a href="#" class="action-icon" aria-label="Ver doador" title="Ver doador"><i class="bi bi-eye"></i></a>
+                <a href="mailto:mariana@example.com" class="action-icon" aria-label="Enviar e-mail" title="Enviar e-mail"><i class="bi bi-envelope"></i></a>
+                <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
+              </td>
+            </tr>
+            <tr data-blood="B+">
+              <td><span class="donor-name">Pedro Santos</span></td>
+              <td><span class="blood-type">B+</span></td>
+              <td>20/01/2023</td>
+              <td class="text-center">22</td>
+              <td class="text-end">
+                <a href="#" class="action-icon" aria-label="Ver doador" title="Ver doador"><i class="bi bi-eye"></i></a>
+                <a href="mailto:pedro@example.com" class="action-icon" aria-label="Enviar e-mail" title="Enviar e-mail"><i class="bi bi-envelope"></i></a>
+                <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
