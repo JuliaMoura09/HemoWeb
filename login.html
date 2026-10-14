@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body style="background-color: #F9FAFB;">
     <div class="container">
@@ -20,19 +20,19 @@
                 <p>Acesse sua conta para gerenciar o aplicativo.</p>
             </div>
 
-            <form action="POST" id="formLogin">
+            <form id="formLogin">
                 <div class="form-field" style="margin-bottom: 11px;">
-                    <label for="exampleFormControlInput1" class="form-label">E-mail</label>
+                    <label for="email" class="form-label">E-mail</label>
                     <input type="email" class="form-control" id="email" placeholder="seu@email.com">
                 </div>
 
                 <div class="form-field" style="margin-bottom: 11px;">
-                    <label for="exampleFormControlInput2" class="form-label">Senha</label>
+                    <label for="senha" class="form-label">Senha</label>
                     <input type="password" class="form-control" id="senha" placeholder="********">
                 </div>
 
             <div class="esquecerSenha" style="text-align: right; margin-bottom: 11px;">
-                <a href="#" style="color:#DA5552;;">Esqueci minha senha</a>
+                <a href="#" style="color:#DA5552;">Esqueci minha senha</a>
             </div>
 
             <div class="form-field" style="margin-bottom: 11px;">
@@ -43,33 +43,51 @@
              <p id="mensagem" class="mt-3"></p>
         </section>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
-    <script type="module">
-                
-        import { auth } from "./firebase.js";
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+   
+   <script type="module">
+    import { auth } from "./firebase.js";
 
-        import {
-            signInWithEmailAndPassword
-        } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+    import {
+        signInWithEmailAndPassword,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-        const formulario = document.getElementById("formLogin");
-        const mensagem = document.getElementById("mensagem");
+    import {
+        getDatabase,
+        ref,
+        get
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-        formulario.addEventListener("submit", async (event) => {
-            event.preventDefault();
+    const db = getDatabase();
+    const formulario = document.getElementById("formLogin");
+    const mensagem = document.getElementById("mensagem");
 
-            const email = document.getElementById("email").value;
-            const senha = document.getElementById("senha").value;
+    formulario.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-            try {
-                await signInWithEmailAndPassword(auth, email, senha);
+        const email = document.getElementById("email").value;
+        const senha = document.getElementById("senha").value;
 
+        try {
+            // 1. Confere e-mail e senha no Authentication
+            const cred = await signInWithEmailAndPassword(auth, email, senha);
+
+            // 2. Confere se o UID está na lista de administradores
+            const snap = await get(ref(db, "administradores/" + cred.user.uid));
+
+            if (snap.exists()) {
                 window.location.href = "doadores.html";
-
-            } catch (erro) {
-                mensagem.textContent = "Não foi possível entrar. Verifique seu e-mail e senha.";
+            } else {
+                await signOut(auth);
+                mensagem.textContent = "Você não tem permissão de administrador.";
             }
-        });
-    </script>
+
+        } catch (erro) {
+            console.log(erro.code, erro.message);
+            mensagem.textContent = "Não foi possível entrar. Verifique seu e-mail e senha.";
+        }
+    });
+</script>
 </body>
 </html>
