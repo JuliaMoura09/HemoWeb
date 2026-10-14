@@ -90,6 +90,18 @@ body {
       margin-bottom: 50px;
     }
 
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  }
+
     .stat-card {
       background: #fff;
       border: 1px solid #e0e4ea;

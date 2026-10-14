@@ -36,31 +36,31 @@
     <h1 class="page-title">Doadores</h1>
 
     <!-- Cartões de estatísticas -->
-    <div class="row g-3 stats-grid">
-      <div class="col-12 col-sm-6 col-xl-3">
-        <div class="stat-card">
-          <div class="stat-label">Total Doadores</div>
-          <div class="stat-number">12.450</div>
-        </div>
+    <div class="stats-grid text-center">
+    <div class="col-12 col-md-3">
+      <div class="stat-card">
+        <div class="stat-label">Total de Usuários</div>
+        <div class="stat-number" id="totalUsuarios">carregando...</div>
       </div>
-      <div class="col-12 col-sm-6 col-xl-3">
-        <div class="stat-card">
-          <div class="stat-label">Aptos a Doar</div>
-          <div class="stat-number number-green">8.230</div>
-        </div>
+    </div>
+    <div class="col-12 col-md-3">
+      <div class="stat-card">
+        <div class="stat-label">Aptos a Doar</div>
+        <div class="stat-number number-green" id="totalAptos">carregando...</div>
       </div>
-      <div class="col-12 col-sm-6 col-xl-3">
-        <div class="stat-card">
-          <div class="stat-label">Aguardando Prazo</div>
-          <div class="stat-number number-orange">3.150</div>
-        </div>
+    </div>
+    <div class="col-12 col-md-3">
+      <div class="stat-card">
+        <div class="stat-label">Total de Doadores</div>
+        <div class="stat-number number-orange" id="totalAguardando">carregando...</div>
       </div>
-      <div class="col-12 col-sm-6 col-xl-3">
-        <div class="stat-card">
-          <div class="stat-label">Inaptos</div>
-          <div class="stat-number number-red">1.070</div>
-        </div>
+    </div>
+    <div class="col-12 col-md-3">
+      <div class="stat-card">
+        <div class="stat-label">Inaptos a Doar</div>
+        <div class="stat-number number-red" id="totalInaptos">carregando...</div>
       </div>
+    </div>
     </div>
 
     <!-- Pesquisa, filtros e tabela -->
@@ -98,7 +98,7 @@
           </thead>
           <tbody id="donorTable">
             <tr data-blood="O+">
-              <td><span class="donor-name">Lucas Silva</span></td>
+              <td><span class="donor-name" id="nomeDoador">nome</span></td>
               <td><span class="blood-type">O+</span></td>
               <td>12/05/2023</td>
               <td class="text-center">28</td>
@@ -108,32 +108,58 @@
                 <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
               </td>
             </tr>
-            <tr data-blood="A-">
-              <td><span class="donor-name">Mariana Costa</span></td>
-              <td><span class="blood-type">A-</span></td>
-              <td>03/08/2023</td>
-              <td class="text-center">25</td>
-              <td class="text-end">
-                <a href="#" class="action-icon" aria-label="Ver doador" title="Ver doador"><i class="bi bi-eye"></i></a>
-                <a href="mailto:mariana@example.com" class="action-icon" aria-label="Enviar e-mail" title="Enviar e-mail"><i class="bi bi-envelope"></i></a>
-                <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
-              </td>
-            </tr>
-            <tr data-blood="B+">
-              <td><span class="donor-name">Pedro Santos</span></td>
-              <td><span class="blood-type">B+</span></td>
-              <td>20/01/2023</td>
-              <td class="text-center">22</td>
-              <td class="text-end">
-                <a href="#" class="action-icon" aria-label="Ver doador" title="Ver doador"><i class="bi bi-eye"></i></a>
-                <a href="mailto:pedro@example.com" class="action-icon" aria-label="Enviar e-mail" title="Enviar e-mail"><i class="bi bi-envelope"></i></a>
-                <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
-              </td>
-            </tr>
           </tbody>
         </table>
       </div>
     </section>
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    import { auth } from "./firebase.js";
+
+    import {signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {getDatabase,ref,get} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import {onValue} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const db = getDatabase();
+
+    //Total de Usuários
+    const usuariosRef = ref(db, "usuarios");
+
+    onValue(usuariosRef, (snapshot) => {
+    const total = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+    document.getElementById("totalUsuarios").textContent =
+    total.toLocaleString("pt-BR");
+    });
+
+    //Aptos e Inaptos
+    const fmt = (n) => n.toLocaleString("pt-BR");
+
+    onValue(ref(db, "questionarios"),(snapshot) => {
+        let aptos = 0;
+        let inaptos = 0;
+
+        snapshot.forEach((child) => {
+          const questionario = child.val();
+
+          if (questionario.apto === true) {
+            aptos++;
+          } else {
+            inaptos++;
+          }
+        });
+
+        document.getElementById("totalAptos").textContent = fmt(aptos);
+        document.getElementById("totalInaptos").textContent = fmt(inaptos);
+      },
+      (erro) => {
+        console.error("Erro ao ler o banco:", erro);
+      }
+    );
+
+    //Informações do Doador
+    
+  </script>
 </body>
 </html>
