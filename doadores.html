@@ -27,7 +27,7 @@
 
   <header class="topbar">
     <div class="text-end">
-      <div class="user-name">Júlia Moura</div>
+      <div class="user-name" id="user"></div>
       <div class="user-role">Administrador</div>
     </div>
   </header>
@@ -91,24 +91,13 @@
             <tr>
               <th scope="col">Doador</th>
               <th scope="col">Tipo Sanguíneo</th>
-              <th scope="col">Última Doação</th>
-              <th scope="col" class="text-center">Total Doações</th>
+              <th scope="col">Tipo Doador</th>
+              <th scope="col" class="text-center">Email</th>
               <th scope="col" class="text-end">Ações</th>
             </tr>
           </thead>
           <tbody id="donorTable">
-            <tr data-blood="O+">
-              <td><span class="donor-name" id="nomeDoador">nome</span></td>
-              <td><span class="blood-type">O+</span></td>
-              <td>12/05/2023</td>
-              <td class="text-center">28</td>
-              <td class="text-end">
-                <a href="#" class="action-icon" aria-label="Ver doador" title="Ver doador"><i class="bi bi-eye"></i></a>
-                <a href="mailto:lucas@example.com" class="action-icon" aria-label="Enviar e-mail" title="Enviar e-mail"><i class="bi bi-envelope"></i></a>
-                <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
-              </td>
-            </tr>
-          </tbody>
+</tbody>
         </table>
       </div>
     </section>
@@ -118,7 +107,7 @@
   <script type="module">
     import { auth } from "./firebase.js";
 
-    import {signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {signInWithEmailAndPassword,signOut, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     import {getDatabase,ref,get} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
     import {onValue} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
@@ -159,7 +148,50 @@
     );
 
     //Informações do Doador
-    
+    const tbody = document.getElementById("donorTable");
+
+    const esc = (v) =>
+      String(v ?? "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[c]));
+
+    onValue(ref(db, "usuarios"), (snapshot) => {
+      tbody.innerHTML = "";
+      let totalDoadores = 0;
+
+      snapshot.forEach((child) => {
+        const u = child.val();
+
+        if (u.isDoador !== true) return;
+        totalDoadores++;
+
+        const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td><span class="donor-name">${esc(u.nome)}</span></td>
+                <td><span class="blood-type">${esc(u.tipoSanguineo)}</span></td>
+                <td>${esc(u.tipoDoador)}</td>
+                <td class="text-center">${esc(u.email)}</td>
+                <td class="text-end">
+                  <a href="#" class="action-icon" aria-label="Ver doador" title="Ver doador"><i class="bi bi-eye"></i></a>
+                  <a href="mailto:${esc(u.email)}" class="action-icon" aria-label="Enviar e-mail" title="Enviar e-mail"><i class="bi bi-envelope"></i></a>
+                  <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
+                </td>
+              `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById("totalAguardando").textContent = fmt(totalDoadores);
+    });
+
+    //Informações Administrador
+    onAuthStateChanged(auth, async (user) => {
+      const snap = await get(ref(db, "administradores/" + user.uid));
+
+      if (snap.exists()) {
+        document.getElementById("user").textContent = snap.val().nome;
+      }
+    });
+
   </script>
 </body>
 </html>
