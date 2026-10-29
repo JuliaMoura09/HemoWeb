@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Artigo HemoConecta</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="pagina.css">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="logo2.png" alt="Logo HemoConecta" style="width: 20dvh; height: 5dvh;">
+        </div>
+
+        <div class="menu-label">Menu Principal</div>
+
+        <nav class="nav flex-column">
+            <a href="doadores.html" class="nav-link">
+                <i class="bi bi-people"></i>
+                <span>Doadores</span>
+            </a>
+
+            <a href="notificacoes.html" class="nav-link">
+                <i class="bi bi-bell"></i>
+                <span>Notificações</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-gift"></i>
+                <span>Empresas Parceiras</span>
+            </a>
+
+            <a href="#" class="nav-link">
+                <i class="bi bi-trophy"></i>
+                <span>Medalhas e Rankings</span>
+            </a>
+
+            <a href="artigo.html" class="nav-link active">
+                <i class="bi bi-book"></i>
+                <span>Conteúdo Educacional</span>
+            </a>
+        </nav>
+    </aside>
+
+    <header class="topbar">
+        <div class="text-end">
+            <div class="user-name" id="user"></div>
+            <div class="user-role">Administrador</div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h1 class="page-title">Novo Artigo</h1>
+
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12 col-xl-10">
+
+                    <div class="card artigo-card">
+                        <div class="card-body p-3 p-md-4">
+
+                            <form id="formArtigo">
+
+                                <div class="mb-3">
+                                    <label for="titulo" class="form-label">
+                                        Título do Artigo
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="titulo"
+                                        name="titulo"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="autor" class="form-label">
+                                        Autor do Artigo
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="autor"
+                                        name="autor"
+                                        required
+                                    >
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Tema do Artigo
+                                    </label>
+
+                                    <div class="temas-artigo" id="temasArtigo">
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="tema"
+                                            id="temaDoacao"
+                                            value="Processo de Doação"
+                                            required
+                                        >
+                                        <label class="btn tema-btn" for="temaDoacao">
+                                            Processo de Doação
+                                        </label>
+
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="tema"
+                                            id="temaSangue"
+                                            value="Tipos Sanguíneos"
+                                        >
+                                        <label class="btn tema-btn" for="temaSangue">
+                                            Tipos Sanguíneos
+                                        </label>
+
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="tema"
+                                            id="temaMedula"
+                                            value="Medula Óssea"
+                                        >
+                                        <label class="btn tema-btn" for="temaMedula">
+                                            Medula Óssea
+                                        </label>
+
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="tema"
+                                            id="temaMitos"
+                                            value="Mitos e Verdades"
+                                        >
+                                        <label class="btn tema-btn" for="temaMitos">
+                                            Mitos e Verdades
+                                        </label>
+
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="tema"
+                                            id="temaPosDoacao"
+                                            value="Pós-doação"
+                                        >
+                                        <label class="btn tema-btn" for="temaPosDoacao">
+                                            Pós-doação
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="introducao" class="form-label">
+                                        Sobre o artigo — Introdução
+                                    </label>
+
+                                    <textarea
+                                        class="form-control mensagem-artigo"
+                                        id="introducao"
+                                        name="introducao"
+                                        placeholder="Apresente o assunto e os principais pontos do artigo."
+                                        required
+                                    ></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="mensagem" class="form-label">
+                                        Entenda o Assunto
+                                    </label>
+
+                                    <textarea
+                                        class="form-control mensagem-artigo"
+                                        id="mensagem"
+                                        name="mensagem"
+                                        placeholder="Desenvolva aqui o conteúdo do artigo."
+                                        required
+                                    ></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="curiosidade" class="form-label">
+                                        Você sabia?
+                                    </label>
+
+                                    <textarea
+                                        class="form-control mensagem-artigo"
+                                        id="curiosidade"
+                                        name="curiosidade"
+                                        placeholder="Adicione uma curiosidade relacionada ao tema."
+                                        required
+                                    ></textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-publicar">
+                                        <i class="bi bi-send-fill me-1"></i>
+                                        Publicar Artigo
+                                    </button>
+                                </div>
+
+                                <div
+                                    id="mensagemStatus"
+                                    class="mt-3"
+                                    role="status"
+                                    aria-live="polite"
+                                ></div>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+        import { auth } from "./firebase.js";
+
+        import { onAuthStateChanged } from
+            "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+        import {
+            getDatabase,
+            ref,
+            push,
+            set,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const db = getDatabase();
+        const form = document.getElementById("formArtigo");
+        const mensagemStatus = document.getElementById("mensagemStatus");
+        const botaoPublicar = form.querySelector('button[type="submit"]');
+
+        let usuarioAtual = null;
+
+        onAuthStateChanged(auth, (usuario) => {
+            if (usuario) {
+                usuarioAtual = usuario;
+
+                document.getElementById("user").textContent =
+                    usuario.displayName || usuario.email || "Administrador";
+            } else {
+                usuarioAtual = null;
+                window.location.href = "login.html";
+            }
+        });
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            if (!usuarioAtual) {
+                mensagemStatus.className = "mt-3 text-danger";
+                mensagemStatus.textContent =
+                    "Faça login para publicar um artigo.";
+                return;
+            }
+
+            const titulo = document.getElementById("titulo").value.trim();
+            const autor = document.getElementById("autor").value.trim();
+            const introducao = document.getElementById("introducao").value.trim();
+            const mensagem = document.getElementById("mensagem").value.trim();
+            const curiosidade = document.getElementById("curiosidade").value.trim();
+
+            const temaSelecionado = form.querySelector(
+                'input[name="tema"]:checked'
+            );
+
+            if (
+                !titulo ||
+                !autor ||
+                !introducao ||
+                !mensagem ||
+                !curiosidade ||
+                !temaSelecionado
+            ) {
+                mensagemStatus.className = "mt-3 text-danger";
+                mensagemStatus.textContent =
+                    "Preencha todos os campos antes de publicar.";
+                return;
+            }
+
+            botaoPublicar.disabled = true;
+            mensagemStatus.className = "mt-3 text-secondary";
+            mensagemStatus.textContent = "Publicando artigo...";
+
+            try {
+                const novoArtigo = push(
+                    ref(db, "artigosEducacionais")
+                );
+
+                await set(novoArtigo, {
+                    titulo: titulo,
+                    autor: autor,
+                    categoria: temaSelecionado.value,
+                    introducao: introducao,
+                    mensagem: mensagem,
+                    curiosidade: curiosidade,
+                    status: "publicado",
+                    autorUid: usuarioAtual.uid,
+                    dataPublicacao: serverTimestamp()
+                });
+
+                mensagemStatus.className = "mt-3 text-success";
+                mensagemStatus.textContent =
+                    "Artigo publicado com sucesso!";
+
+                form.reset();
+
+            } catch (erro) {
+                console.error("Erro ao publicar artigo:", erro);
+
+                mensagemStatus.className = "mt-3 text-danger";
+                mensagemStatus.textContent =
+                    "Não foi possível publicar o artigo. Verifique sua conexão e as permissões do Firebase.";
+            } finally {
+                botaoPublicar.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
