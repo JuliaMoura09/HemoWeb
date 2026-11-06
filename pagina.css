@@ -228,3 +228,146 @@ body {
       .search-input { max-width: 100%; }
       .stats-grid { row-gap: 12px; }
     }
+
+
+/* =====================================================
+   NOVOS ESTILOS - Página Empresas Parceiras & Cupons
+   (adicionados ao final, sem alterar o que já existia)
+   ===================================================== */
+
+/* Logo (imagem) na sidebar */
+.brand img { height: 30px; width: auto; }
+
+@media (max-width: 900px) {
+  .brand img { height: 26px; max-width: 56px; object-fit: cover; object-position: left; }
+}
+
+/* Cabeçalho da página: título + subtítulo + botão */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header .page-title { margin-bottom: 4px; }
+
+.btn-add {
+  background: #df252c;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.btn-add:hover { background: #c41e25; color: #fff; }
+
+.number-blue { color: #3b5bdb; }
+.number-dark { color: #172033; }
+
+/* Abas */
+.tabs-custom {
+  border-bottom: 1px solid #e0e4ea;
+  margin: 24px 0 20px;
+}
+
+.tabs-custom .nav-link {
+  display: block;
+  margin: 0 0 -1px;
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #687286;
+  font-size: 13px;
+}
+
+.tabs-custom .nav-link.active {
+  color: #df252c;
+  background: transparent;
+  border-bottom-color: #df252c;
+}
+
+/* Cards de parceiros */
+.partners-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px)  { .partners-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1200px) { .partners-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.partner-card {
+  background: #fff;
+  border: 1px solid #e0e4ea;
+  border-radius: 13px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 2px rgba(20, 30, 50, .04);
+}
+
+.partner-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #eef0f4;
+  margin-bottom: 12px;
+}
+
+.partner-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.av-green  { background: #4caf50; }
+.av-blue   { background: #4b7bec; }
+.av-orange { background: #f97316; }
+.av-purple { background: #c4b5fd; }
+
+.partner-info { flex: 1; min-width: 0; }
+.partner-name { font-size: 14px; font-weight: 600; line-height: 1.2; }
+.partner-cat  { font-size: 11px; color: #7d8799; }
+
+.badge-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.badge-ativo   { background: #dcfce7; color: #15803d; }
+.badge-pausado { background: #f3f4f6; color: #374151; border: 1px solid #e0e4ea; }
+
+.partner-stats { display: flex; gap: 40px; }
+
+.partner-stats small {
+  display: block;
+  font-size: 11px;
+  color: #7d8799;
+  margin-bottom: 2px;
+}
+
+.partner-stats strong { font-size: 14px; }
+
+/* Tabela de cupons (aba Cupons Ativos) */
+.table-cupons {
+  background: #fff;
+  border: 1px solid #e0e4ea;
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .page-header { flex-direction: column; }
+}
