@@ -97,7 +97,7 @@
 
       <div class="collapse px-3 py-3 border-bottom" id="filters">
         <label for="bloodFilter" class="form-label small">Tipo sanguíneo</label>
-        <select id="bloodFilter" class="form-select" style="max-width: 220px;">
+        <select id="bloodFilter" class="form-control search-input" style="max-width: 220px;">
           <option value="">Todos os tipos</option>
           <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
           <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
@@ -115,8 +115,7 @@
               <th scope="col" class="text-end">Ações</th>
             </tr>
           </thead>
-          <tbody id="donorTable">
-</tbody>
+          <tbody id="donorTable"></tbody>
         </table>
       </div>
     </section>
@@ -210,6 +209,7 @@
         document.getElementById("user").textContent = snap.val().nome;
       }
     });
+
 
   </script>
 </body>
