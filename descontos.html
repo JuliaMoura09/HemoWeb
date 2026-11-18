@@ -46,13 +46,12 @@
     </aside>
 
     <header class="topbar">
-    <div class="text-end">
-      <div class="user-name" id="user"></div>
-      <div class="user-role">Administrador</div>
-    </div>
-  </header>
+        <div class="text-end">
+            <div class="user-name" id="user"></div>
+            <div class="user-role">Administrador</div>
+        </div>
+    </header>
 
-    <!-- CONTEÚDO -->
     <main class="main-content">
 
         <div class="page-header">
@@ -70,28 +69,28 @@
             <div class="stat-card stat-flex">
                 <div>
                     <div class="stat-label">Empresas Parceiras</div>
-                    <div class="stat-number number-blue" id="totalParceiras"></div>
+                    <div class="stat-number number-blue" id="totalParceiras">0</div>
                 </div>
             </div>
 
             <div class="stat-card stat-flex">
                 <div>
                     <div class="stat-label">Cupons Ativos</div>
-                    <div class="stat-number number-green" id="totalCupons"></div>
+                    <div class="stat-number number-green" id="totalCupons">0</div>
                 </div>
             </div>
 
             <div class="stat-card stat-flex">
                 <div>
                     <div class="stat-label">Resgates (Mês)</div>
-                    <div class="stat-number number-orange" id="totalResgates"></div>
+                    <div class="stat-number number-orange" id="totalResgates">0</div>
                 </div>
             </div>
 
             <div class="stat-card stat-flex">
                 <div>
                     <div class="stat-label">Valor Médio Desconto</div>
-                    <div class="stat-number number-dark" id="valorMedio"></div>
+                    <div class="stat-number number-dark" id="valorMedio">—</div>
                 </div>
             </div>
         </div>
@@ -108,24 +107,12 @@
 
         <div class="tab-content">
             <div class="tab-pane fade show active" id="tab-parceiras" role="tabpanel">
-                <div class="partners-grid" id="listaParceiras">
-
-                    <div class="partner-card">
-                        <div class="partner-head">
-                            <div class="partner-avatar av-green">V</div>
-                            <div class="partner-info">
-                                <div class="partner-name">Vita</div>
-                                <div class="partner-cat">Saúde</div>
-                            </div>
-                            <span class="badge-status badge-ativo">Ativo</span>
-                        </div>
-                        <div class="partner-stats">
-                            <div><small>Cupons Ativos</small><strong>12</strong></div>
-                            <div><small>Total Resgates</small><strong>450</strong></div>
-                        </div>
-                    </div>
+                <div class="partners-grid" id="listaParceiras"></div>
             </div>
 
+            <div class="tab-pane fade" id="tab-cupons" role="tabpanel">
+                <div class="partners-grid" id="listaCupons"></div>
+            </div>
         </div>
     </main>
 
@@ -133,28 +120,122 @@
     <script type="module">
         import { auth } from "./firebase.js";
 
-        import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import { getDatabase, ref, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
         const db = getDatabase();
 
-        //Informações Administrador
+        // Informações Administrador
         onAuthStateChanged(auth, async (user) => {
-          const snap = await get(ref(db, "administradores/" + user.uid));
-
-          if (snap.exists()) {
-            document.getElementById("user").textContent = snap.val().nome;
-          }
+            if (!user) return;
+            const snap = await get(ref(db, "administradores/" + user.uid));
+            if (snap.exists()) {
+                document.getElementById("user").textContent = snap.val().nome;
+            }
         });
 
-        //Empresas Parceiras
-        const parceirosRef = ref(db, "parceiros");
+        // Helpers
+        const fmtNum = (n) => Number(n).toLocaleString("pt-BR");
+        const fmtMoeda = (n) =>
+            Number(n).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-      onValue(parceirosRef, (snapshot) => {
-      const total = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-      document.getElementById("totalParceiras").textContent =
-      total.toLocaleString("pt-BR");
-      });
+        function el(tag, className, text) {
+            const e = document.createElement(tag);
+            if (className) e.className = className;
+            if (text !== undefined) e.textContent = text;
+            return e;
+        }
+
+        function statBox(label, valor) {
+            const div = document.createElement("div");
+            div.append(el("small", null, label), el("strong", null, valor));
+            return div;
+        }
+
+        function descontoTexto(c) {
+            return c.tipoValor === "porcentagem" ? `${c.valor}%` : fmtMoeda(c.valor);
+        }
+
+        function cardParceiro(nome, categoria, ativos, resgates) {
+            const card = el("div", "partner-card");
+
+            const head = el("div", "partner-head");
+            head.append(el("div", "partner-avatar av-green", nome.charAt(0).toUpperCase()));
+
+            const info = el("div", "partner-info");
+            info.append(el("div", "partner-name", nome), el("div", "partner-cat", categoria));
+            head.append(info);
+
+            const ativo = ativos > 0;
+            head.append(el("span", "badge-status " + (ativo ? "badge-ativo" : ""), ativo ? "Ativo" : "Inativo"));
+
+            const stats = el("div", "partner-stats");
+            stats.append(statBox("Cupons Ativos", fmtNum(ativos)), statBox("Total Resgates", fmtNum(resgates)));
+
+            card.append(head, stats);
+            return card;
+        }
+
+        function cardCupom(empresa, c) {
+            const card = el("div", "partner-card");
+
+            const head = el("div", "partner-head");
+            head.append(el("div", "partner-avatar av-green", empresa.charAt(0).toUpperCase()));
+
+            const info = el("div", "partner-info");
+            info.append(el("div", "partner-name", c.codCupom || "—"), el("div", "partner-cat", empresa));
+            head.append(info, el("span", "badge-status badge-ativo", "Ativo"));
+
+            const stats = el("div", "partner-stats");
+            stats.append(statBox("Desconto", descontoTexto(c)), statBox("Pontos", fmtNum(c.pontos || 0)));
+
+            card.append(head, stats);
+            return card;
+        }
+
+        // Empresas Parceiras + Cupons (tempo real)
+        onValue(ref(db, "parceiros"), (snapshot) => {
+            const listaParceiras = document.getElementById("listaParceiras");
+            const listaCupons = document.getElementById("listaCupons");
+            listaParceiras.innerHTML = "";
+            listaCupons.innerHTML = "";
+
+            let totalParceiras = 0;
+            let totalAtivos = 0;
+            let totalResgates = 0;
+            const somaDinheiro = [];
+            const somaPorcent = [];
+
+            snapshot.forEach((child) => {
+                const nome = child.key;
+                const dados = child.val() || {};
+                const cupons = Object.values(dados.cupons || {});
+                const ativos = cupons.filter((c) => c.ativo);
+                const resgates = cupons.reduce((s, c) => s + (Number(c.resgates) || 0), 0);
+                const categoria = dados.categoria || (cupons[0] && cupons[0].categoria) || "—";
+
+                totalParceiras++;
+                totalAtivos += ativos.length;
+                totalResgates += resgates;
+
+                listaParceiras.append(cardParceiro(nome, categoria, ativos.length, resgates));
+
+                ativos.forEach((c) => {
+                    listaCupons.append(cardCupom(nome, c));
+                    (c.tipoValor === "porcentagem" ? somaPorcent : somaDinheiro).push(Number(c.valor) || 0);
+                });
+            });
+
+            const media = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length;
+            const partes = [];
+            if (somaDinheiro.length) partes.push(fmtMoeda(media(somaDinheiro)));
+            if (somaPorcent.length) partes.push(Math.round(media(somaPorcent)) + "%");
+
+            document.getElementById("totalParceiras").textContent = fmtNum(totalParceiras);
+            document.getElementById("totalCupons").textContent = fmtNum(totalAtivos);
+            document.getElementById("totalResgates").textContent = fmtNum(totalResgates);
+            document.getElementById("valorMedio").textContent = partes.length ? partes.join(" · ") : "—";
+        }, (erro) => console.error("Erro ao ler parceiros:", erro));
     </script>
 </body>
 </html>

@@ -74,6 +74,55 @@
                                     <select id="empresaParceira" name="empresaParceira" class="form-control" required></select>
                                 </div>
 
+                                <!--Categoria do Cupom-->
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Categoria
+                                    </label>
+
+                                    <div class="temas-artigo" id="temasArtigo">
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="tema"
+                                            id="temaDoacao"
+                                            value="Processo de Doação"
+                                            required
+                                        >
+                                        <label class="btn tema-btn" for="temaDoacao">
+                                            Saúde
+                                        </label>
+
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="tema"
+                                            id="temaSangue"
+                                            value="Tipos Sanguíneos"
+                                        >
+                                        <label class="btn tema-btn" for="temaSangue">
+                                            Alimentação
+                                        </label>
+
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="tema"
+                                            id="temaMedula"
+                                            value="Medula Óssea"
+                                        >
+                                        <label class="btn tema-btn" for="temaMedula">
+                                            Educação
+                                        </label>
+
+                                        <input
+                                            type="radio"
+                                            class="btn-check"
+                                            name="tema"
+                                            id="temaMitos"
+                                            value="Mitos e Verdades"
+                                        >
+
                                 <div class="mb-3">
                                     <label class="form-label d-block">Tipo do Desconto</label>
 
@@ -198,6 +247,7 @@
         const campoPorcentagem = document.getElementById("campoPorcentagem");
         const valorDinheiro = document.getElementById("valorDinheiro");
         const valorPorcentagem = document.getElementById("valorPorcentagem");
+        const categoria = document.querySelector('input[name="categoria"]:checked')?.value;
 
         function atualizarCampoValor() {
             const tipo = document.querySelector('input[name="tipoValor"]:checked').value;
@@ -247,7 +297,7 @@
             const codigo = document.getElementById("codigoCupom").value.trim();
             const pontos = Number(document.getElementById("pontosCupom").value);
 
-            if (!empresaId || !valor || !codigo || !pontos) {
+            if (!empresaId || !valor || !codigo || !pontos || !categoria) {
                 mensagemStatus.className = "mt-3 text-danger";
                 mensagemStatus.textContent = "Preencha todos os campos antes de criar.";
                 return;
@@ -267,6 +317,7 @@
                 const novoCupom = push(ref(db, `parceiros/${empresaId}/cupons`));
 
                 await set(novoCupom, {
+                    categoria: categoria,
                     tipoValor: tipoValor,
                     valor: valor,
                     pontos: pontos,
