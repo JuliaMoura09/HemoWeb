@@ -155,39 +155,12 @@
                     <tbody id="listaHistorico">
                         <tr>
                             <td>
-                                <div class="msg-title">Tipo Sanguíneo Requisitado</div>
-                                <div class="msg-text">Seu tipo sanguíneo está em estado crítico. Agende agora uma doação e ajude até 4 pessoas.</div>
+                                <div class="msg-title"></div>
+                                <div class="msg-text"></div>
                             </td>
-                            <td class="publico"><i class="bi bi-people"></i>Doadores O-</td>
-                            <td>Hoje, 10h30</td>
-                            <td><div class="abertura"><div class="bar"><span style="width:68%"></span></div><small>68%</small></div></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="msg-title">Lembrete de Agendamento</div>
-                                <div class="msg-text">Você já está apto a doar sangue! Agende agora mesmo sua doação.</div>
-                            </td>
-                            <td class="publico"><i class="bi bi-people"></i>Aptos (Homens)</td>
-                            <td>Ontem, 14h00</td>
-                            <td><div class="abertura"><div class="bar"><span style="width:45%"></span></div><small>45%</small></div></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="msg-title">Cupom Desbloqueado</div>
-                                <div class="msg-text">Você desbloqueou um novo cupom! Vá até a aba de cupons para ter acesso a ele.</div>
-                            </td>
-                            <td class="publico"><i class="bi bi-people"></i>Doador #492</td>
-                            <td>Há uma semana, 15h30</td>
-                            <td><div class="abertura"><div class="bar"><span style="width:100%"></span></div><small>100%</small></div></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="msg-title">Lembrete de Agendamento</div>
-                                <div class="msg-text">Você já está apto a doar sangue! Agende agora mesmo sua doação.</div>
-                            </td>
-                            <td class="publico"><i class="bi bi-people"></i>Todos Ativos</td>
-                            <td>29/05/2026</td>
-                            <td><div class="abertura"><div class="bar"><span style="width:32%"></span></div><small>32%</small></div></td>
+                            <td class="publico"><i class="bi bi-people"></i></td>
+                            <td></td>
+                            <td><div class="abertura"><div class="bar"><span style="width:68%"></span></div><small></small></div></td>
                         </tr>
                     </tbody>
                 </table>
@@ -195,7 +168,7 @@
 
         </div>
     </main>
-<!--
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module">
         import { auth } from "./firebase.js";
@@ -222,69 +195,7 @@
             }
         });
 
-        // Contador de caracteres
-        mensagem.addEventListener("input", () => {
-            document.getElementById("contador").textContent = mensagem.value.length;
-        });
-
-        function aviso(texto, classe) {
-            status.className = classe;
-            status.textContent = texto;
-        }
-
-        // Envio: grava a notificação em notificacoes/{uid} de cada doador do público escolhido
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const tipo = document.getElementById("tipoNotificacao").value;
-            const publico = document.getElementById("publicoAlvo").value;
-            const texto = mensagem.value.trim();
-
-            if (!tipo || !publico || !texto) {
-                aviso("Preencha todos os campos antes de enviar.", "text-danger");
-                return;
-            }
-
-            btnEnviar.disabled = true;
-            aviso("Enviando...", "text-secondary");
-
-            try {
-                const usuariosSnap = await get(ref(db, "usuarios"));
-                const atualizacoes = {};
-                let enviados = 0;
-
-                usuariosSnap.forEach((u) => {
-                    const dados = u.val() || {};
-                    if (publico === "todos" || dados.tipoSanguineo === publico) {
-                        const chave = push(ref(db, "notificacoes/" + u.key)).key;
-                        atualizacoes[`notificacoes/${u.key}/${chave}`] = {
-                            tipo: tipo,
-                            mensagem: texto,
-                            lida: false,
-                            dataEnvio: serverTimestamp()
-                        };
-                        enviados++;
-                    }
-                });
-
-                if (enviados === 0) {
-                    aviso("Nenhum doador encontrado para esse público.", "text-danger");
-                    return;
-                }
-
-                await update(ref(db), atualizacoes);
-
-                aviso(`Notificação enviada para ${enviados} doador(es)!`, "text-success");
-                form.reset();
-                document.getElementById("contador").textContent = "0";
-            } catch (erro) {
-                console.error("Erro ao enviar notificação:", erro);
-                aviso("Não foi possível enviar. Verifique sua conexão e as regras do Firebase.", "text-danger");
-            } finally {
-                btnEnviar.disabled = false;
-            }
-        });
     </script>
--->
+
 </body>
 </html>
