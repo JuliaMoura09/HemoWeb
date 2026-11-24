@@ -22,11 +22,6 @@
                 <span>Doadores</span>
             </a>
 
-            <a href="notificacoes.html" class="nav-link">
-                <i class="bi bi-bell"></i>
-                <span>Notificações</span>
-            </a>
-
             <a href="descontos.html" class="nav-link">
                 <i class="bi bi-gift"></i>
                 <span>Empresas Parceiras</span>
@@ -88,7 +83,7 @@
         <div class="search-wrap">
           <i class="bi bi-search"></i>
           <input id="searchDonor" type="search" class="form-control search-input"
-                 placeholder="Buscar por nome, CPF ou email..." aria-label="Buscar doador">
+                 placeholder="Buscar por nome, CPF ou email..." aria-label="Buscar doador" autocomplete="off">
         </div>
         <button class="filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#filters">
           <i class="bi bi-funnel me-1"></i> Mais Filtros
@@ -167,39 +162,98 @@
 
     //Informações do Doador
     const tbody = document.getElementById("donorTable");
+    const campoBusca = document.getElementById("searchDonor");
+    const filtroSangue = document.getElementById("bloodFilter");
 
     const esc = (v) =>
       String(v ?? "").replace(/[&<>"']/g, (c) => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
       }[c]));
 
-    onValue(ref(db, "usuarios"), (snapshot) => {
+    // Texto sem acento e em minúsculas, para a busca ignorar maiúsculas e acentos
+    const normalizar = (v) =>
+      String(v ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+
+    // Lista de doadores guardada na memória; a busca filtra esta lista sem ir ao banco
+    let doadores = [];
+
+    function doadorCombina(u, termo, termoNumeros, tipo) {
+      if (tipo && String(u.tipoSanguineo ?? "").trim() !== tipo) return false;
+      if (!termo) return true;
+
+      if (normalizar(u.nome).includes(termo)) return true;
+      if (normalizar(u.email).includes(termo)) return true;
+
+      // CPF: compara só os números, então "123.456" e "123456" encontram o mesmo CPF
+      if (termoNumeros) {
+        const cpf = String(u.cpf ?? "").replace(/\D/g, "");
+        if (cpf.includes(termoNumeros)) return true;
+      }
+
+      return false;
+    }
+
+    function renderizarDoadores() {
+      const termo = normalizar(campoBusca.value);
+      const termoNumeros = campoBusca.value.replace(/\D/g, "");
+      const tipo = filtroSangue.value;
+
+      const filtrados = doadores.filter((u) =>
+        doadorCombina(u, termo, termoNumeros, tipo)
+      );
+
       tbody.innerHTML = "";
-      let totalDoadores = 0;
+
+      if (filtrados.length === 0) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td colspan="5" class="text-center text-muted py-4">
+            ${doadores.length === 0 ? "Nenhum doador cadastrado." : "Nenhum doador encontrado para essa busca."}
+          </td>
+        `;
+        tbody.appendChild(tr);
+        return;
+      }
+
+      filtrados.forEach((u) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="donor-name">${esc(u.nome)}</span></td>
+          <td><span class="blood-type">${esc(u.tipoSanguineo)}</span></td>
+          <td>${esc(u.tipoDoador)}</td>
+          <td class="text-center">${esc(u.email)}</td>
+          <td class="text-end">
+            <a href="#" class="action-icon" aria-label="Ver doador" title="Ver doador"><i class="bi bi-eye"></i></a>
+            <a href="mailto:${esc(u.email)}" class="action-icon" aria-label="Enviar e-mail" title="Enviar e-mail"><i class="bi bi-envelope"></i></a>
+            <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    onValue(ref(db, "usuarios"), (snapshot) => {
+      doadores = [];
 
       snapshot.forEach((child) => {
         const u = child.val();
-
         if (u.isDoador !== true) return;
-        totalDoadores++;
-
-        const tr = document.createElement("tr");
-              tr.innerHTML = `
-                <td><span class="donor-name">${esc(u.nome)}</span></td>
-                <td><span class="blood-type">${esc(u.tipoSanguineo)}</span></td>
-                <td>${esc(u.tipoDoador)}</td>
-                <td class="text-center">${esc(u.email)}</td>
-                <td class="text-end">
-                  <a href="#" class="action-icon" aria-label="Ver doador" title="Ver doador"><i class="bi bi-eye"></i></a>
-                  <a href="mailto:${esc(u.email)}" class="action-icon" aria-label="Enviar e-mail" title="Enviar e-mail"><i class="bi bi-envelope"></i></a>
-                  <a href="#" class="action-icon" aria-label="Mais opções" title="Mais opções"><i class="bi bi-three-dots-vertical"></i></a>
-                </td>
-              `;
-        tbody.appendChild(tr);
+        doadores.push({ id: child.key, ...u });
       });
 
-      document.getElementById("totalAguardando").textContent = fmt(totalDoadores);
+      document.getElementById("totalAguardando").textContent = fmt(doadores.length);
+
+      // Mantém a busca e o filtro atuais quando os dados mudam no banco
+      renderizarDoadores();
     });
+
+    // Pesquisa enquanto o administrador digita e ao trocar o tipo sanguíneo
+    campoBusca.addEventListener("input", renderizarDoadores);
+    filtroSangue.addEventListener("change", renderizarDoadores);
 
     //Informações Administrador
     onAuthStateChanged(auth, async (user) => {

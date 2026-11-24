@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,63 +31,63 @@
                     <input type="password" class="form-control" id="senha" placeholder="********">
                 </div>
 
-            <div class="esquecerSenha" style="text-align: right; margin-bottom: 11px;">
-                <a href="#" style="color:#DA5552;">Esqueci minha senha</a>
-            </div>
+                <div class="esquecerSenha" style="text-align: right; margin-bottom: 11px;">
+                    <a href="recuperar-senha.html" style="color:#DA5552;">Esqueci minha senha</a>
+                </div>
 
-            <div class="form-field" style="margin-bottom: 11px;">
-                <input type="submit" class="form-control" style="background-color: #C62828; color: white;" id="exampleFormControlInput3" value="Entrar">
-            </div>
+                <div class="form-field" style="margin-bottom: 11px;">
+                    <input type="submit" class="form-control" style="background-color: #C62828; color: white;" id="exampleFormControlInput3" value="Entrar">
+                </div>
             </form>
 
-             <p id="mensagem" class="mt-3"></p>
+            <p id="mensagem" class="mt-3"></p>
         </section>
     </div>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-   
-   <script type="module">
-    import { auth } from "./firebase.js";
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    import {
-        signInWithEmailAndPassword,
-        signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    <script type="module">
+        import { auth } from "./firebase.js";
 
-    import {
-        getDatabase,
-        ref,
-        get
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        import {
+            signInWithEmailAndPassword,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    const db = getDatabase();
-    const formulario = document.getElementById("formLogin");
-    const mensagem = document.getElementById("mensagem");
+        import {
+            getDatabase,
+            ref,
+            get
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    formulario.addEventListener("submit", async (event) => {
-        event.preventDefault();
+        const db = getDatabase();
+        const formulario = document.getElementById("formLogin");
+        const mensagem = document.getElementById("mensagem");
 
-        const email = document.getElementById("email").value;
-        const senha = document.getElementById("senha").value;
+        formulario.addEventListener("submit", async (event) => {
+            event.preventDefault();
 
-        try {
-            // 1. Confere e-mail e senha no Authentication
-            const cred = await signInWithEmailAndPassword(auth, email, senha);
+            const email = document.getElementById("email").value;
+            const senha = document.getElementById("senha").value;
 
-            // 2. Confere se o UID está na lista de administradores
-            const snap = await get(ref(db, "administradores/" + cred.user.uid));
+            try {
+                // 1. Confere e-mail e senha no Authentication
+                const cred = await signInWithEmailAndPassword(auth, email, senha);
 
-            if (snap.exists()) {
-                window.location.href = "doadores.html";
-            } else {
-                await signOut(auth);
-                mensagem.textContent = "Você não tem permissão de administrador.";
+                // 2. Confere se o UID está na lista de administradores
+                const snap = await get(ref(db, "administradores/" + cred.user.uid));
+
+                if (snap.exists()) {
+                    window.location.href = "doadores.html";
+                } else {
+                    await signOut(auth);
+                    mensagem.textContent = "Você não tem permissão de administrador.";
+                }
+
+            } catch (erro) {
+                console.log(erro.code, erro.message);
+                mensagem.textContent = "Não foi possível entrar. Verifique seu e-mail e senha.";
             }
-
-        } catch (erro) {
-            console.log(erro.code, erro.message);
-            mensagem.textContent = "Não foi possível entrar. Verifique seu e-mail e senha.";
-        }
-    });
-</script>
+        });
+    </script>
 </body>
 </html>

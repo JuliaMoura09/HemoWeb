@@ -24,11 +24,6 @@
                 <span>Doadores</span>
             </a>
 
-            <a href="notificacoes.html" class="nav-link">
-                <i class="bi bi-bell"></i>
-                <span>Notificações</span>
-            </a>
-
             <a href="descontos.html" class="nav-link">
                 <i class="bi bi-gift"></i>
                 <span>Empresas Parceiras</span>
@@ -66,7 +61,7 @@
                             <form id="formCupom">
 
                                 <div class="mb-3">
-                                    <label for="titulo" class="form-label">
+                                    <label for="empresaParceira" class="form-label">
                                         Empresa Parceira
                                     </label>
                                     <br>
@@ -84,44 +79,38 @@
                                         <input
                                             type="radio"
                                             class="btn-check"
-                                            name="tema"
-                                            id="temaDoacao"
-                                            value="Processo de Doação"
+                                            name="categoria"
+                                            id="catSaude"
+                                            value="Saúde"
                                             required
                                         >
-                                        <label class="btn tema-btn" for="temaDoacao">
+                                        <label class="btn tema-btn" for="catSaude">
                                             Saúde
                                         </label>
 
                                         <input
                                             type="radio"
                                             class="btn-check"
-                                            name="tema"
-                                            id="temaSangue"
-                                            value="Tipos Sanguíneos"
+                                            name="categoria"
+                                            id="catAlimentacao"
+                                            value="Alimentação"
                                         >
-                                        <label class="btn tema-btn" for="temaSangue">
+                                        <label class="btn tema-btn" for="catAlimentacao">
                                             Alimentação
                                         </label>
 
                                         <input
                                             type="radio"
                                             class="btn-check"
-                                            name="tema"
-                                            id="temaMedula"
-                                            value="Medula Óssea"
+                                            name="categoria"
+                                            id="catEducacao"
+                                            value="Educação"
                                         >
-                                        <label class="btn tema-btn" for="temaMedula">
+                                        <label class="btn tema-btn" for="catEducacao">
                                             Educação
                                         </label>
-
-                                        <input
-                                            type="radio"
-                                            class="btn-check"
-                                            name="tema"
-                                            id="temaMitos"
-                                            value="Mitos e Verdades"
-                                        >
+                                    </div>
+                                </div>
 
                                 <div class="mb-3">
                                     <label class="form-label d-block">Tipo do Desconto</label>
@@ -160,7 +149,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="autor" class="form-label">
+                                    <label for="codigoCupom" class="form-label">
                                         Código do Cupom
                                     </label>
 
@@ -174,7 +163,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">
+                                    <label for="pontosCupom" class="form-label">
                                         Pontos Necessários
                                     </label>
 
@@ -237,7 +226,7 @@
             }
             usuarioAtual = usuario;
             document.getElementById("user").textContent =
-                usuario.displayName || usuario.nome || "Administrador";
+                usuario.displayName || usuario.email || "Administrador";
 
             carregarEmpresas();
         });
@@ -247,7 +236,6 @@
         const campoPorcentagem = document.getElementById("campoPorcentagem");
         const valorDinheiro = document.getElementById("valorDinheiro");
         const valorPorcentagem = document.getElementById("valorPorcentagem");
-        const categoria = document.querySelector('input[name="categoria"]:checked')?.value;
 
         function atualizarCampoValor() {
             const tipo = document.querySelector('input[name="tipoValor"]:checked').value;
@@ -268,17 +256,17 @@
         //Select de Empresas
         function carregarEmpresas() {
             onValue(ref(db, "parceiros"), (snapshot) => {
-            const selecionado = selectEmpresas.value;
-            selectEmpresas.innerHTML = '<option value="">Selecione...</option>';
+                const selecionado = selectEmpresas.value;
+                selectEmpresas.innerHTML = '<option value="">Selecione...</option>';
 
-            snapshot.forEach((child) => {
-                const opt = document.createElement("option");
-                opt.textContent = child.key;
-                selectEmpresas.appendChild(opt);
-            });
+                snapshot.forEach((child) => {
+                    const opt = document.createElement("option");
+                    opt.textContent = child.key;
+                    selectEmpresas.appendChild(opt);
+                });
 
-            selectEmpresas.value = selecionado;
-        }, (erro) => console.error("Erro ao ler parceiros:", erro));
+                selectEmpresas.value = selecionado;
+            }, (erro) => console.error("Erro ao ler parceiros:", erro));
         }
 
         form.addEventListener("submit", async (event) => {
@@ -296,6 +284,9 @@
             const empresaId = selectEmpresas.value;
             const codigo = document.getElementById("codigoCupom").value.trim();
             const pontos = Number(document.getElementById("pontosCupom").value);
+
+            // Lida no momento do envio (antes estava fora do submit, então ficava sempre vazia)
+            const categoria = document.querySelector('input[name="categoria"]:checked')?.value;
 
             if (!empresaId || !valor || !codigo || !pontos || !categoria) {
                 mensagemStatus.className = "mt-3 text-danger";

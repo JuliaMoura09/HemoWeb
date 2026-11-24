@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medalhas e Ranking - HemoConecta</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="pagina.css">
+
+    <style>
+        /* ---------- Medalhas ---------- */
+        .medalhas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .medalha-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #fff;
+            border: 1px solid #e8eaee;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+        }
+
+        .medalha-icone {
+            flex: 0 0 44px;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .medalha-icone.rosa    { background: #fde8e8; color: #d93a3a; }
+        .medalha-icone.laranja { background: #fdf0d8; color: #d9780f; }
+        .medalha-icone.verde   { background: #dcf5e4; color: #1f9d55; }
+        .medalha-icone.amarelo { background: #fdf3b8; color: #c9a100; }
+        .medalha-icone.roxo    { background: #ece8fb; color: #6b4fd8; }
+
+        .medalha-info { min-width: 0; }
+
+        .medalha-nome {
+            margin: 0 0 2px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .medalha-descricao {
+            margin: 0 0 4px;
+            font-size: 0.75rem;
+            color: #4b5563;
+        }
+
+        .medalha-desbloqueio {
+            margin: 0;
+            font-size: 0.7rem;
+            color: #9ca3af;
+        }
+
+        .grade-aviso {
+            grid-column: 1 / -1;
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        /* ---------- Top Doadores ---------- */
+        .ranking-panel {
+            background: #fff;
+            border: 1px solid #e8eaee;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+            overflow: hidden;
+        }
+
+        .ranking-titulo {
+            margin: 0;
+            padding: 16px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1f2937;
+            border-bottom: 1px solid #e8eaee;
+        }
+
+        .ranking-table {
+            width: 100%;
+            margin: 0;
+            border-collapse: collapse;
+        }
+
+        .ranking-table thead th {
+            padding: 12px 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            background: #f9fafb;
+            border-bottom: 1px solid #e8eaee;
+            white-space: nowrap;
+        }
+
+        .ranking-table tbody td {
+            padding: 14px 20px;
+            font-size: 0.8rem;
+            color: #1f2937;
+            border-bottom: 1px solid #eef0f3;
+            vertical-align: middle;
+        }
+
+        .ranking-table tbody tr:last-child td { border-bottom: 0; }
+
+        .ranking-posicao {
+            display: inline-block;
+            min-width: 30px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+        .ranking-posicao.ouro   { color: #e0a100; }
+        .ranking-posicao.bronze { color: #d9780f; }
+
+        .ranking-nome { font-weight: 600; }
+
+        .ranking-pontos {
+            display: block;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .ranking-pts {
+            display: block;
+            font-size: 0.65rem;
+            color: #9ca3af;
+        }
+
+        .ranking-vazio {
+            padding: 24px 20px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        @media (max-width: 1100px) {
+            .medalhas-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .medalhas-grid { grid-template-columns: 1fr; }
+            .ranking-table thead th,
+            .ranking-table tbody td { padding: 12px 10px; }
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="logo2.png" alt="Logo HemoConecta" style="width: 20dvh; height: 5dvh;">
+        </div>
+
+        <div class="menu-label">Menu Principal</div>
+
+        <nav class="nav flex-column">
+            <a href="doadores.html" class="nav-link">
+                <i class="bi bi-people"></i>
+                <span>Doadores</span>
+            </a>
+
+            <a href="notificacoes.html" class="nav-link">
+                <i class="bi bi-bell"></i>
+                <span>Notificações</span>
+            </a>
+
+            <a href="descontos.html" class="nav-link">
+                <i class="bi bi-gift"></i>
+                <span>Empresas Parceiras</span>
+            </a>
+
+            <a href="medalhas.html" class="nav-link active">
+                <i class="bi bi-trophy"></i>
+                <span>Medalhas e Rankings</span>
+            </a>
+
+            <a href="artigo.html" class="nav-link">
+                <i class="bi bi-book"></i>
+                <span>Conteúdo Educacional</span>
+            </a>
+        </nav>
+    </aside>
+
+    <header class="topbar">
+        <div class="text-end">
+            <div class="user-name" id="user"></div>
+            <div class="user-role">Administrador</div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h1 class="page-title">Medalhas e Ranking</h1>
+
+        <!-- Medalhas -->
+        <section class="medalhas-grid" id="listaMedalhas" aria-label="Medalhas">
+            <div class="grade-aviso">Carregando medalhas...</div>
+        </section>
+
+        <!-- Top Doadores -->
+        <section class="ranking-panel">
+            <h2 class="ranking-titulo">Top Doadores</h2>
+
+            <div class="table-responsive">
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 22%;">Doador</th>
+                            <th scope="col" style="width: 22%;">Nível</th>
+                            <th scope="col" class="text-center" style="width: 28%;">Total Doações</th>
+                            <th scope="col" class="text-end" style="width: 28%;">Pontos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaRanking">
+                        <tr><td colspan="4" class="ranking-vazio">Carregando ranking...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+        import { auth } from "./firebase.js";
+        import { onAuthStateChanged } from
+            "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getDatabase, ref, get } from
+            "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const db = getDatabase();
+
+        // Evita que texto vire HTML
+        const esc = (v) =>
+            String(v ?? "").replace(/[&<>"']/g, (c) => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+            }[c]));
+
+        const fmt = (n) => Number(n ?? 0).toLocaleString("pt-BR");
+
+        /*
+         * Estrutura no banco
+         *
+         *  usuarios/<uid>/medalhas/<chave>: true     (já existe: primeira_gota, doador_frequente...)
+         *  usuarios/<uid>/hemocoins: número          (usado como pontos do ranking)
+         *
+         *  catalogoMedalhas/<chave>: { nome, descricao, icone, cor, ordem }
+         *      (cadastre importando o arquivo catalogo-medalhas.json; a <chave> precisa
+         *       ser igual à chave gravada em usuarios/<uid>/medalhas)
+         */
+
+        // Usado só se o nó "catalogoMedalhas" ainda não existir no banco
+        const catalogoPadrao = {
+            primeira_gota:    { nome: "Primeira Gota",      descricao: "Realizou a primeira doação",              icone: "bi-droplet",          cor: "rosa",    ordem: 1 },
+            doador_frequente: { nome: "Doador Frequente",   descricao: "Doou 3x no ano",                          icone: "bi-award",            cor: "laranja", ordem: 2 },
+            pre_triagem:      { nome: "Missão Pré-Triagem", descricao: "Respondeu o questionário de pré-triagem", icone: "bi-heart-pulse",      cor: "verde",   ordem: 3 },
+            plaquetas:        { nome: "Super Doador",       descricao: "Realizou a primeira doação de plasma",    icone: "bi-star",             cor: "amarelo", ordem: 4 },
+            lenda_viva:       { nome: "Lenda Viva",         descricao: "Realizou 20 doações",                     icone: "bi-trophy",           cor: "amarelo", ordem: 5 },
+            disposto_ajudar:  { nome: "Disposto a Ajudar",  descricao: "Doou sangue quando seu tipo estava em estado crítico", icone: "bi-clipboard2-pulse", cor: "roxo", ordem: 6 },
+            medula:           { nome: "Herói da Medula",    descricao: "Cadastrou no Redome",                     icone: "bi-heart",            cor: "rosa",    ordem: 7 },
+            recrutador:       { nome: "Recrutador",         descricao: "Convidou 3 amigos",                       icone: "bi-lightning-charge", cor: "roxo",    ordem: 8 },
+            estudioso:        { nome: "Estudioso",          descricao: "Leu os artigos de conteúdo educacional",  icone: "bi-book",             cor: "verde",   ordem: 9 }
+        };
+
+        const CORES = ["rosa", "laranja", "verde", "amarelo", "roxo"];
+
+        function renderizarMedalhas(medalhas) {
+            const grade = document.getElementById("listaMedalhas");
+
+            if (medalhas.length === 0) {
+                grade.innerHTML = `<div class="grade-aviso">Nenhuma medalha cadastrada.</div>`;
+                return;
+            }
+
+            grade.innerHTML = medalhas.map((m) => {
+                const cor = CORES.includes(m.cor) ? m.cor : "rosa";
+                const icone = /^bi-[a-z0-9-]+$/.test(m.icone ?? "") ? m.icone : "bi-award";
+
+                return `
+                    <article class="medalha-card">
+                        <div class="medalha-icone ${cor}">
+                            <i class="bi ${icone}"></i>
+                        </div>
+                        <div class="medalha-info">
+                            <h3 class="medalha-nome">${esc(m.nome)}</h3>
+                            <p class="medalha-descricao">${esc(m.descricao)}</p>
+                            <p class="medalha-desbloqueio">Desbloqueado por ${fmt(m.desbloqueado)} ${m.desbloqueado === 1 ? "doador" : "doadores"}</p>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        function renderizarRanking(doadores) {
+            const tbody = document.getElementById("tabelaRanking");
+
+            if (doadores.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="ranking-vazio">Nenhum doador no ranking ainda.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = doadores.map((d, i) => {
+                const posicao = i + 1;
+                const classe = posicao === 1 ? "ouro" : posicao === 3 ? "bronze" : "";
+
+                return `
+                    <tr>
+                        <td>
+                            <span class="ranking-posicao ${classe}">#${posicao}</span>
+                            <span class="ranking-nome">${esc(d.nome)}</span>
+                        </td>
+                        <td>${esc(d.nivel)}</td>
+                        <td class="text-center">${d.doacoes === null ? "—" : fmt(d.doacoes)}</td>
+                        <td class="text-end">
+                            <span class="ranking-pontos">${fmt(d.pontos)}</span>
+                            <span class="ranking-pts">pts</span>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        async function carregarDados() {
+            try {
+                const [snapCatalogo, snapUsuarios] = await Promise.all([
+                    get(ref(db, "catalogoMedalhas")),
+                    get(ref(db, "usuarios"))
+                ]);
+
+                const catalogo = snapCatalogo.exists() ? snapCatalogo.val() : catalogoPadrao;
+
+                // Conta quantos usuários têm cada medalha (usuarios/<uid>/medalhas/<chave> === true)
+                const contagem = {};
+                const usuarios = [];
+
+                snapUsuarios.forEach((child) => {
+                    const u = child.val() || {};
+                    usuarios.push(u);
+
+                    const dasMedalhas = u.medalhas || {};
+                    Object.keys(dasMedalhas).forEach((chave) => {
+                        if (dasMedalhas[chave] === true) {
+                            contagem[chave] = (contagem[chave] || 0) + 1;
+                        }
+                    });
+                });
+
+                const medalhas = Object.entries(catalogo)
+                    .map(([chave, m]) => ({
+                        chave,
+                        ...m,
+                        desbloqueado: contagem[chave] || 0
+                    }))
+                    .sort((a, b) => (a.ordem ?? 999) - (b.ordem ?? 999));
+
+                renderizarMedalhas(medalhas);
+
+                // Ranking: pontos = hemocoins, dos 10 maiores
+                const ranking = usuarios
+                    .map((u) => ({
+                        nome: u.nome || "(sem nome)",
+                        nivel: u.nivel || "",
+                        // O campo de total de doações não aparece nos prints; ajuste aqui se tiver outro nome
+                        doacoes: Number.isFinite(u.totalDoacoes) ? u.totalDoacoes
+                               : Number.isFinite(u.doacoes) ? u.doacoes
+                               : null,
+                        pontos: Number(u.hemocoins) || 0
+                    }))
+                    .filter((d) => d.pontos > 0)
+                    .sort((a, b) => b.pontos - a.pontos)
+                    .slice(0, 10);
+
+                renderizarRanking(ranking);
+
+            } catch (erro) {
+                console.error("Erro ao carregar medalhas e ranking:", erro);
+                document.getElementById("listaMedalhas").innerHTML =
+                    `<div class="grade-aviso text-danger">Não foi possível carregar as medalhas. Verifique sua conexão e as permissões do Firebase.</div>`;
+                document.getElementById("tabelaRanking").innerHTML =
+                    `<tr><td colspan="4" class="ranking-vazio text-danger">Não foi possível carregar o ranking.</td></tr>`;
+            }
+        }
+
+        // ---------- Administrador logado ----------
+        onAuthStateChanged(auth, async (usuario) => {
+            if (!usuario) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            let nome = usuario.displayName || usuario.email || "Administrador";
+            try {
+                const snap = await get(ref(db, "administradores/" + usuario.uid));
+                if (snap.exists() && snap.val().nome) nome = snap.val().nome;
+            } catch (e) {
+                // mantém o nome padrão
+            }
+            document.getElementById("user").textContent = nome;
+
+            carregarDados();
+        });
+    </script>
+</body>
+</html>

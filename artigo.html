@@ -23,11 +23,6 @@
                 <span>Doadores</span>
             </a>
 
-            <a href="notificacoes.html" class="nav-link">
-                <i class="bi bi-bell"></i>
-                <span>Notificações</span>
-            </a>
-
             <a href="descontos.html" class="nav-link">
                 <i class="bi bi-gift"></i>
                 <span>Empresas Parceiras</span>
@@ -58,7 +53,7 @@
             <div>
                 <h1 class="page-title">Conteúdo Educacional</h1>
             </div>
-            <button type="button" class="btn-add">Adicionar Artigo</button>
+            <button type="button" class="btn-add" id="btnNovoArtigo">Adicionar Artigo</button>
         </div>
 
         <div class="filtros" id="filtros">
@@ -172,12 +167,14 @@
             // Ainda não apaga do banco (próximo passo)
             console.log("Excluir artigo:", id);
         } else {
-            console.log("Editar artigo:", id);
+            // Abre a tela de edição com o artigo escolhido
+            window.location.href = "editarArtigo.html?id=" + encodeURIComponent(id);
         }
     });
 
+    // Ajuste o nome do arquivo se a sua tela de novo artigo tiver outro nome
     document.getElementById("btnNovoArtigo").addEventListener("click", () => {
-        console.log("Novo artigo");
+        window.location.href = "novoArtigo.html";
     });
 </script>
 
