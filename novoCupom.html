@@ -29,7 +29,7 @@
                 <span>Empresas Parceiras</span>
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="medalhas.html" class="nav-link">
                 <i class="bi bi-trophy"></i>
                 <span>Medalhas e Rankings</span>
             </a>
@@ -208,7 +208,7 @@
         import { onAuthStateChanged } from
             "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import {
-            getDatabase, ref, push, set, onValue, serverTimestamp
+            getDatabase, ref, push, set, get, onValue, serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
         const db = getDatabase();
@@ -219,17 +219,25 @@
 
         let usuarioAtual = null;
 
-        onAuthStateChanged(auth, (usuario) => {
-            if (!usuario) {
-                window.location.href = "login.html";
-                return;
-            }
-            usuarioAtual = usuario;
-            document.getElementById("user").textContent =
-                usuario.displayName || usuario.email || "Administrador";
+        onAuthStateChanged(auth, async (usuario) => {
+        if (!usuario) {
+            window.location.href = "login.html";
+            return;
+        }
 
-            carregarEmpresas();
-        });
+        usuarioAtual = usuario;
+
+        let nome = usuario.displayName || usuario.email || "Administrador";
+        try {
+            const snap = await get(ref(db, "administradores/" + usuario.uid));
+            if (snap.exists() && snap.val().nome) nome = snap.val().nome;
+        } catch (e) {
+            console.error("Erro ao buscar nome do administrador:", e);
+        }
+        document.getElementById("user").textContent = nome;
+
+        carregarEmpresas();
+    });
 
         //Tipo de Desconto
         const campoDinheiro = document.getElementById("campoDinheiro");

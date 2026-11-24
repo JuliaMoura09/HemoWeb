@@ -29,7 +29,7 @@
                 <span>Empresas Parceiras</span>
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="medalhas.html" class="nav-link">
                 <i class="bi bi-trophy"></i>
                 <span>Medalhas e Rankings</span>
             </a>
@@ -231,6 +231,7 @@
             ref,
             push,
             set,
+            get,
             serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
@@ -241,16 +242,22 @@
 
         let usuarioAtual = null;
 
-        onAuthStateChanged(auth, (usuario) => {
-            if (usuario) {
-                usuarioAtual = usuario;
-
-                document.getElementById("user").textContent =
-                    usuario.displayName || usuario.email || "Administrador";
-            } else {
-                usuarioAtual = null;
+            onAuthStateChanged(auth, async (usuario) => {
+            if (!usuario) {
                 window.location.href = "login.html";
+                return;
             }
+
+            usuarioAtual = usuario;
+
+            let nome = usuario.displayName || usuario.email || "Administrador";
+            try {
+                const snap = await get(ref(db, "administradores/" + usuario.uid));
+                if (snap.exists() && snap.val().nome) nome = snap.val().nome;
+            } catch (e) {
+                console.error("Erro ao buscar nome do administrador:", e);
+            }
+            document.getElementById("user").textContent = nome;
         });
 
         form.addEventListener("submit", async (event) => {

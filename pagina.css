@@ -553,3 +553,149 @@ body {
         @media (max-width: 700px) {
             .artigos-grid { grid-template-columns: 1fr; }
         }
+
+          .medalhas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .medalha-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #fff;
+            border: 1px solid #e8eaee;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+        }
+
+        .medalha-icone {
+            flex: 0 0 44px;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .medalha-icone.rosa    { background: #fde8e8; color: #d93a3a; }
+        .medalha-icone.laranja { background: #fdf0d8; color: #d9780f; }
+        .medalha-icone.verde   { background: #dcf5e4; color: #1f9d55; }
+        .medalha-icone.amarelo { background: #fdf3b8; color: #c9a100; }
+        .medalha-icone.roxo    { background: #ece8fb; color: #6b4fd8; }
+
+        .medalha-info { min-width: 0; }
+
+        .medalha-nome {
+            margin: 0 0 2px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .medalha-descricao {
+            margin: 0 0 4px;
+            font-size: 0.75rem;
+            color: #4b5563;
+        }
+
+        .medalha-desbloqueio {
+            margin: 0;
+            font-size: 0.7rem;
+            color: #9ca3af;
+        }
+
+        .grade-aviso {
+            grid-column: 1 / -1;
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        /* ---------- Top Doadores ---------- */
+        .ranking-panel {
+            background: #fff;
+            border: 1px solid #e8eaee;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+            overflow: hidden;
+        }
+
+        .ranking-titulo {
+            margin: 0;
+            padding: 16px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1f2937;
+            border-bottom: 1px solid #e8eaee;
+        }
+
+        .ranking-table {
+            width: 100%;
+            margin: 0;
+            border-collapse: collapse;
+        }
+
+        .ranking-table thead th {
+            padding: 12px 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            background: #f9fafb;
+            border-bottom: 1px solid #e8eaee;
+            white-space: nowrap;
+        }
+
+        .ranking-table tbody td {
+            padding: 14px 20px;
+            font-size: 0.8rem;
+            color: #1f2937;
+            border-bottom: 1px solid #eef0f3;
+            vertical-align: middle;
+        }
+
+        .ranking-table tbody tr:last-child td { border-bottom: 0; }
+
+        .ranking-posicao {
+            display: inline-block;
+            min-width: 30px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+        .ranking-posicao.ouro   { color: #e0a100; }
+        .ranking-posicao.bronze { color: #d9780f; }
+
+        .ranking-nome { font-weight: 600; }
+
+        .ranking-pontos {
+            display: block;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .ranking-pts {
+            display: block;
+            font-size: 0.65rem;
+            color: #9ca3af;
+        }
+
+        .ranking-vazio {
+            padding: 24px 20px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        @media (max-width: 1100px) {
+            .medalhas-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .medalhas-grid { grid-template-columns: 1fr; }
+            .ranking-table thead th,
+            .ranking-table tbody td { padding: 12px 10px; }
+        }

@@ -89,7 +89,7 @@
                 }
 
                 mostrar("text-success",
-                    "Se o e-mail estiver cadastrado, você receberá o link de recuperação. Redirecionando para o login...");
+                    "Link enviado. Redirecionando para o login...");
 
                 setTimeout(() => {
                     window.location.href = "login.html";
@@ -101,7 +101,7 @@
                 if (erro.code === "auth/user-not-found") {
                     // Mesma resposta de sucesso para não revelar quais e-mails existem
                     mostrar("text-success",
-                        "Se o e-mail estiver cadastrado, você receberá o link de recuperação. Redirecionando para o login...");
+                        "Link enviado. Redirecionando para o login...");
                     setTimeout(() => {
                         window.location.href = "login.html";
                     }, 3000);

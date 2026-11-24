@@ -28,7 +28,7 @@
                 <span>Empresas Parceiras</span>
             </a>
 
-            <a href="#" class="nav-link">
+            <a href="medalhas.html" class="nav-link">
                 <i class="bi bi-trophy"></i>
                 <span>Medalhas e Rankings</span>
             </a>
@@ -49,11 +49,13 @@
 
     <main class="main-content">
 
-        <div class="artigo-header">
+        <div class="page-header">
             <div>
                 <h1 class="page-title">Conteúdo Educacional</h1>
             </div>
-            <button type="button" class="btn-add" id="btnNovoArtigo">Adicionar Artigo</button>
+            <div>
+                <button type="button" class="btn-add" onclick="window.location.href='novoArtigo.html'">Adicionar Artigo</button>
+            </div>
         </div>
 
         <div class="filtros" id="filtros">
@@ -170,11 +172,6 @@
             // Abre a tela de edição com o artigo escolhido
             window.location.href = "editarArtigo.html?id=" + encodeURIComponent(id);
         }
-    });
-
-    // Ajuste o nome do arquivo se a sua tela de novo artigo tiver outro nome
-    document.getElementById("btnNovoArtigo").addEventListener("click", () => {
-        window.location.href = "novoArtigo.html";
     });
 </script>
 
